@@ -49,6 +49,9 @@ float fov = 45.0f;
 glm::mat4 projection;
 glm::mat4 view = glm::mat4(1.0f);
 
+extern const unsigned char awesomeface_png[];
+extern const unsigned awesomeface_png_size;
+
 int main()
 {
     
@@ -113,7 +116,7 @@ int main()
     // Flip images loaded from stb_image
     stbi_set_flip_vertically_on_load(true);
 
-    Texture tex = Texture("../res/imgs/tree.png", true);
+    Texture tex = Texture(awesomeface_png, &awesomeface_png_size, true);
 
     tex.genAndBindAndLoad();
 
