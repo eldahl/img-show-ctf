@@ -15,6 +15,8 @@ public:
   unsigned int ID;
 
   Shader(const char *vertexPath, const char *fragmentPath);
+  Shader(const char *vertex, const char *fragment, bool dummy);
+  
 
   void use();
 

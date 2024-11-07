@@ -30,8 +30,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 971;
+const unsigned int SCR_HEIGHT = 577;
 
 // Camera vectors
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 16.0f);
@@ -49,8 +49,29 @@ float fov = 45.0f;
 glm::mat4 projection;
 glm::mat4 view = glm::mat4(1.0f);
 
-extern const unsigned char awesomeface_png[];
-extern const unsigned awesomeface_png_size;
+const char* vertex = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec2 aTexCoord;\n\n"
+"out vec2 TexCoord;\n\n"
+"void main()\n{\n"
+"    gl_Position = vec4(aPos, 1.0);\n"
+"    TexCoord = vec2(aTexCoord.x, aTexCoord.y);\n"
+"}\n";
+
+const char* fragment = "#version 330 core\n"
+"out vec4 FragColor;\n\n"
+"in vec2 TexCoord;\n\n"
+"uniform sampler2D Tex;\n\n"
+"void main()\n"
+"{\n"
+"    vec4 texColor = texture(Tex, TexCoord);\n"
+"    if(texColor.a < 0.1)\n"
+"        discard;\n"
+"    FragColor = texColor;\n"
+"}\n";
+
+extern const unsigned char c2_png[];
+extern const unsigned c2_png_size;
 
 int main()
 {
@@ -97,7 +118,7 @@ int main()
     int availableTextureUnits;
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &availableTextureUnits);
     
-    Shader imgShader("../res/shaders/vertex.vs", "../res/shaders/fragment.fs"); 
+    Shader imgShader(vertex, fragment, true); 
     
     float imgVertices[] = {
         -1.0f, -1.0f, -1.0f,  0.0f, 0.0f,
@@ -116,7 +137,7 @@ int main()
     // Flip images loaded from stb_image
     stbi_set_flip_vertically_on_load(true);
 
-    Texture tex = Texture(awesomeface_png, &awesomeface_png_size, true);
+    Texture tex = Texture(c2_png, &c2_png_size, true);
 
     tex.genAndBindAndLoad();
 

@@ -17,6 +17,7 @@ Texture::Texture(const char* filePath, bool withAlpha) {
 Texture::Texture(const unsigned char* buffer, const unsigned* size, bool withAlpha) {
     _buffer = buffer;
     _size = size;
+    loadWithAlpha = withAlpha;
     loadFromFile = false;
 }
 
@@ -30,11 +31,12 @@ unsigned int Texture::genAndBindAndLoad() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
+    int desiredChannels = loadWithAlpha ? STBI_rgb_alpha : STBI_rgb;
     unsigned char* imgData;
     if(loadFromFile)
-        imgData = stbi_load(filepath, &width, &height, &nrChannels, 0);
+        imgData = stbi_load(filepath, &width, &height, &nrChannels, desiredChannels);
     else
-        imgData = stbi_load_from_memory(_buffer, *_size, &width, &height, &nrChannels, 0);
+        imgData = stbi_load_from_memory(_buffer, *_size, &width, &height, &nrChannels, desiredChannels);
 
     // If successful, generate texture into the bound GL texture
     if (imgData) {

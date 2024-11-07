@@ -3,6 +3,40 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <sstream>
 
+Shader::Shader(const char *_vertex, const char *_fragment, bool dummy) {
+  std::string vertexCode;
+  std::string fragmentCode;
+
+  const char *vShaderCode = _vertex;
+  const char *fShaderCode = _fragment;
+
+  // Compile shaders
+  unsigned int vertex, fragment;
+
+  // Vertex
+  vertex = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertex, 1, &vShaderCode, NULL);
+  glCompileShader(vertex);
+  _checkCompileErrors(vertex, "VERTEX");
+
+  // Fragment
+  fragment = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragment, 1, &fShaderCode, NULL);
+  glCompileShader(fragment);
+  _checkCompileErrors(fragment, "FRAGMENT");
+
+  // Shader
+  ID = glCreateProgram();
+  glAttachShader(ID, vertex);
+  glAttachShader(ID, fragment);
+  glLinkProgram(ID);
+  _checkCompileErrors(ID, "PROGRAM");
+
+  // Clean up
+  glDeleteShader(vertex);
+  glDeleteShader(fragment);
+}
+
 Shader::Shader(const char *vertexPath, const char *fragmentPath) {
   std::string vertexCode;
   std::string fragmentCode;
