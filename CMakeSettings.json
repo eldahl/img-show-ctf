@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "x64-Release",
+      "generator": "Visual Studio 17 2022",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "-DVCPKG_TARGET_TRIPLET=\"x64-windows-static\" -DCMAKE_TOOLCHAIN_FILE=\"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake\" -DCMAKE_PREFIX_PATH=\"C:/Users/win/projects/img-show-ctf/vcpkg_installed/x64-windows-static\"",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": []
+    }
+  ]
+}

@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.29)
 
-project(img-show-ctf)
-
+set(CMAKE_GENERATOR_PLATFORM x64)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(VCPKG_TARGET_TRIPLET "x64-windows-static")
+set(GLFW_BUILD_STATIC ON)
+
+project(img-show-ctf)
 
 
 find_package(glfw3 3.4 REQUIRED)
-
 find_package(glm 1.0.1 REQUIRED)
 
 # Creates C resources file from files in given directory
@@ -70,9 +72,16 @@ file(GLOB INCLUDES include/*.h include/*.cpp)
 
 file(GLOB SOURCES src/*.h src/*.cpp)
 
-add_executable(${PROJECT_NAME} src/main.cpp ${GLAD_SOURCES} ${INCLUDES}
+IF (WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+    add_executable(${PROJECT_NAME} WIN32 src/main.cpp ${GLAD_SOURCES} ${INCLUDES}
                                ${CMAKE_CURRENT_BINARY_DIR}/generated_res.c ${SOURCES})
+ELSE()
+    add_executable(${PROJECT_NAME} src/main.cpp ${GLAD_SOURCES} ${INCLUDES}
+                               ${CMAKE_CURRENT_BINARY_DIR}/generated_res.c ${SOURCES})
+ENDIF()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # GLFW
-target_link_libraries(${PROJECT_NAME} glfw)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+add_definitions(-DGLFW_STATIC)
