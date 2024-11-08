@@ -1,11 +1,13 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.29)
 
 project(img-show-ctf)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+
 find_package(glfw3 3.4 REQUIRED)
+
 find_package(glm 1.0.1 REQUIRED)
 
 # Creates C resources file from files in given directory
@@ -53,7 +55,8 @@ endfunction()
 create_resources("${CMAKE_CURRENT_SOURCE_DIR}/res/imgs"
                  "${CMAKE_CURRENT_BINARY_DIR}/generated_res.c")
 
-set(GEN_RES_SOURCE ${CMAKE_CURRENT_BINARY_DIR}/generated_res.c)
+set(GEN_RES_SOURCE ${CMAKE_BINARY_DIR}/generated_res.c)
+message(STATUS "Generated resource file: ${GEN_RES_SOURCE}")
 
 # GLAD files
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/glad/include)
@@ -62,12 +65,14 @@ file(GLOB BUTTERFLIES_SOURCES_C ${CMAKE_CURRENT_SOURCE_DIR} *.c
 set(GLAD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/src/glad.c)
 
 # stb-image.h and future files in include
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 file(GLOB INCLUDES include/*.h include/*.cpp)
 
 file(GLOB SOURCES src/*.h src/*.cpp)
 
 add_executable(${PROJECT_NAME} src/main.cpp ${GLAD_SOURCES} ${INCLUDES}
-                               ${GEN_RES_SOURCE} ${SOURCES})
+                               ${CMAKE_CURRENT_BINARY_DIR}/generated_res.c ${SOURCES})
 
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # GLFW
 target_link_libraries(${PROJECT_NAME} glfw)

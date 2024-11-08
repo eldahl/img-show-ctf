@@ -5,6 +5,8 @@
 #include <stb/stb_image.h>
 #elif __APPLE__
 #include "../include/stb_image.h"
+#elif _WIN32
+#include "stb_image.h"
 #endif
 #include <iostream>
 

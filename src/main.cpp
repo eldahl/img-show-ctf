@@ -18,6 +18,8 @@
 #include <stb/stb_image.h>
 #elif __APPLE__
 #include "../include/stb_image.h"
+#elif _WIN32
+#include "stb_image.h"
 #endif
 
 #include "shader.h"
@@ -70,8 +72,10 @@ const char* fragment = "#version 330 core\n"
 "    FragColor = texColor;\n"
 "}\n";
 
-extern const unsigned char c2_png[];
-extern const unsigned c2_png_size;
+extern "C" {
+    extern const unsigned char c2_png[];
+    extern const unsigned c2_png_size;
+}
 
 int main()
 {

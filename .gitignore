@@ -1,2 +1,8 @@
 .DS_Store
 build/
+.vs/
+CMakeFiles/
+CMakeSettings.json
+vcpkg-configuration.json
+vcpkg.json
+vcpkg_installed/
